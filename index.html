@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Input PO — Trakindo</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+
+    <header class="header">
+      <div class="header-inner">
+        <div class="logo">
+          <span class="logo-icon">⬡</span>
+          <div>
+            <h1>AI Input PO</h1>
+            <p>Trakindo — Purchase Order System</p>
+          </div>
+        </div>
+        <div id="countBadge" class="count-badge">0 data</div>
+      </div>
+    </header>
+
+    <main class="main">
+
+      <!-- LEFT: Chat -->
+      <section class="panel chat-panel">
+        <div class="panel-label">Chat dengan AI</div>
+
+        <div class="templates">
+          <button class="tbtn" onclick="tpl('PO 4500299999, Oli Mesin Caterpillar 15W40 qty 10, nilai 5500000, cabang Batu Hijau, vendor PT Sumber Jaya')">+ Spare Part</button>
+          <button class="tbtn" onclick="tpl('PO 4101784100, Filter Udara Cat D8T qty 4, Rp 12000000, cabang Kuala Kencana')">+ Filter</button>
+          <button class="tbtn" onclick="tpl('Input PO 4500300000 untuk Laptop Dell 15 inch qty 2 harga 18 juta cabang HO vendor PT Maju Elektronik')">+ IT / Umum</button>
+        </div>
+
+        <div class="chat-area" id="chatArea">
+          <div class="msg ai">
+            <div class="av ai-av">AI</div>
+            <div class="bbl">Halo! Ceritakan data PO yang mau diinput. Contoh: <em>"PO 4500299999, Seal Kit Cylinder D8T qty 3, nilai 7.500.000, cabang Batu Hijau"</em></div>
+          </div>
+        </div>
+
+        <div class="input-row">
+          <textarea id="userInput"
+            placeholder="Ketik data PO... (No PO, deskripsi, qty, nilai, cabang, vendor, note)"
+            onkeydown="handleKey(event)"></textarea>
+          <button class="send-btn" id="sendBtn" onclick="sendMessage()">Kirim</button>
+        </div>
+
+        <div class="action-row">
+          <button class="abtn" onclick="undoLast()">↩ Batalkan terakhir</button>
+          <button class="abtn danger" onclick="clearAll()">Hapus semua</button>
+        </div>
+      </section>
+
+      <!-- RIGHT: Table -->
+      <section class="panel table-panel">
+        <div class="panel-label" style="display:flex;justify-content:space-between;align-items:center;">
+          <span>Tabel List PO</span>
+          <button class="abtn" onclick="copyTable()">Salin ke Excel</button>
+        </div>
+
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>No PO</th>
+                <th>Deskripsi</th>
+                <th>Qty</th>
+                <th>Nilai PO (Rp)</th>
+                <th>Cabang</th>
+                <th>Vendor</th>
+                <th>Note</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody">
+              <tr class="empty-row">
+                <td colspan="8">Belum ada data PO. Mulai input lewat chat.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
