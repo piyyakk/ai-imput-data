@@ -1,15 +1,12 @@
-// ── State ──
 let rows = [];
 let busy = false;
 let apiKey = localStorage.getItem('po_api_key') || '';
 
-// ── Init ──
 document.addEventListener('DOMContentLoaded', () => {
   injectApiKeyBanner();
   renderTable();
 });
 
-// ── API Key Banner ──
 function injectApiKeyBanner() {
   const chatPanel = document.querySelector('.chat-panel');
   const banner = document.createElement('div');
@@ -38,13 +35,11 @@ function hideBanner() {
   if (b) b.style.display = 'none';
 }
 
-// ── Template ──
 function tpl(text) {
   document.getElementById('userInput').value = text;
   document.getElementById('userInput').focus();
 }
 
-// ── Key handler ──
 function handleKey(e) {
   if (e.key === 'Enter' && !e.shiftKey) {
     e.preventDefault();
@@ -52,7 +47,6 @@ function handleKey(e) {
   }
 }
 
-// ── Chat UI ──
 function addMsg(role, html) {
   const area = document.getElementById('chatArea');
   const div = document.createElement('div');
@@ -78,7 +72,6 @@ function removeLoader() {
   document.getElementById('loadingMsg')?.remove();
 }
 
-// ── Send ──
 async function sendMessage() {
   const input = document.getElementById('userInput');
   const text = input.value.trim();
@@ -112,8 +105,8 @@ Format response WAJIB:
     "deskripsi": "deskripsi lengkap barang/jasa",
     "qty": angka,
     "nilai_po": angka (tanpa titik/koma, dalam rupiah),
-    "cabang": "nama cabang (HO / Batu Hijau / Kuala Kencana / dll)",
-    "vendor": "nama vendor jika ada, kosong jika tidak disebutkan",
+    "cabang": "nama cabang",
+    "vendor": "nama vendor jika ada",
     "note": "catatan tambahan jika ada"
   },
   "reply": "konfirmasi singkat bahasa Indonesia"
@@ -122,7 +115,7 @@ Format response WAJIB:
 Jika pesan bukan input data PO:
 {"status":"chat","reply":"jawaban singkat bahasa Indonesia"}
 
-Nilai PO: konversi "juta" → x1.000.000, "ribu" → x1.000. Simpan sebagai angka bulat.
+Nilai PO: konversi "juta" x1.000.000, "ribu" x1.000. Simpan sebagai angka bulat.
 ${existingData}`;
 
   try {
@@ -150,11 +143,8 @@ ${existingData}`;
     const data = await res.json();
     const raw = data.content.map(c => c.text || '').join('');
     let parsed;
-    try {
-      parsed = JSON.parse(raw.replace(/```json|```/g, '').trim());
-    } catch {
-      parsed = { status: 'chat', reply: raw };
-    }
+    try { parsed = JSON.parse(raw.replace(/```json|```/g, '').trim()); }
+    catch { parsed = { status: 'chat', reply: raw }; }
 
     removeLoader();
 
@@ -176,7 +166,6 @@ ${existingData}`;
   input.focus();
 }
 
-// ── Table ──
 function fmtRp(n) {
   if (!n && n !== 0) return '-';
   const num = parseInt(String(n).replace(/\D/g, ''));
@@ -207,7 +196,6 @@ function renderTable() {
   `).join('');
 }
 
-// ── Actions ──
 function undoLast() {
   if (!rows.length) { showToast('Tidak ada data untuk dibatalkan'); return; }
   rows.pop();
@@ -233,7 +221,6 @@ function copyTable() {
     .then(() => showToast('Tabel disalin! Paste langsung ke Excel.'));
 }
 
-// ── Toast ──
 function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
